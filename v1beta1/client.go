@@ -16,20 +16,20 @@ type Inventory interface {
 }
 
 type inventoryClient struct {
-	K8sClusterService               kessel.KesselK8SClusterServiceClient
-	PolicyRelationshipServiceClient kesselrel.KesselPolicyRelationshipServiceClient
-	PolicyServiceClient             kessel.KesselK8SPolicyServiceClient
-	RhelHostServiceClient           kessel.KesselRhelHostServiceClient
-	gRPCConn                        *grpc.ClientConn
-	tokenClient                     *TokenClient
+	K8sClusterService                              kessel.KesselK8SClusterServiceClient
+	K8SPolicyIsPropagatedToK8SClusterServiceClient kesselrel.KesselK8SPolicyIsPropagatedToK8SClusterServiceClient
+	PolicyServiceClient                            kessel.KesselK8SPolicyServiceClient
+	RhelHostServiceClient                          kessel.KesselRhelHostServiceClient
+	gRPCConn                                       *grpc.ClientConn
+	tokenClient                                    *TokenClient
 }
 
 type inventoryHttpClient struct {
-	K8sClusterService               kessel.KesselK8SClusterServiceHTTPClient
-	PolicyRelationshipServiceClient kesselrel.KesselPolicyRelationshipServiceHTTPClient
-	PolicyServiceClient             kessel.KesselK8SPolicyServiceHTTPClient
-	RhelHostServiceClient           kessel.KesselRhelHostServiceHTTPClient
-	tokenClient                     *TokenClient
+	K8sClusterService                                  kessel.KesselK8SClusterServiceHTTPClient
+	K8SPolicyIsPropagatedToK8SClusterServiceHTTPClient kesselrel.KesselK8SPolicyIsPropagatedToK8SClusterServiceHTTPClient
+	PolicyServiceClient                                kessel.KesselK8SPolicyServiceHTTPClient
+	RhelHostServiceClient                              kessel.KesselRhelHostServiceHTTPClient
+	tokenClient                                        *TokenClient
 }
 
 var _ Inventory = &inventoryHttpClient{}
@@ -62,12 +62,12 @@ func New(config *Config) (*inventoryClient, error) {
 	}
 
 	return &inventoryClient{
-		K8sClusterService:               kessel.NewKesselK8SClusterServiceClient(conn),
-		PolicyRelationshipServiceClient: kesselrel.NewKesselPolicyRelationshipServiceClient(conn),
-		PolicyServiceClient:             kessel.NewKesselK8SPolicyServiceClient(conn),
-		RhelHostServiceClient:           kessel.NewKesselRhelHostServiceClient(conn),
-		gRPCConn:                        conn,
-		tokenClient:                     tokencli,
+		K8sClusterService: kessel.NewKesselK8SClusterServiceClient(conn),
+		K8SPolicyIsPropagatedToK8SClusterServiceClient: kesselrel.NewKesselK8SPolicyIsPropagatedToK8SClusterServiceClient(conn),
+		PolicyServiceClient:                            kessel.NewKesselK8SPolicyServiceClient(conn),
+		RhelHostServiceClient:                          kessel.NewKesselRhelHostServiceClient(conn),
+		gRPCConn:                                       conn,
+		tokenClient:                                    tokencli,
 	}, err
 }
 
@@ -92,11 +92,11 @@ func NewHttpClient(ctx context.Context, config *Config) (*inventoryHttpClient, e
 	}
 
 	return &inventoryHttpClient{
-		K8sClusterService:               kessel.NewKesselK8SClusterServiceHTTPClient(client),
-		PolicyRelationshipServiceClient: kesselrel.NewKesselPolicyRelationshipServiceHTTPClient(client),
-		PolicyServiceClient:             kessel.NewKesselK8SPolicyServiceHTTPClient(client),
-		RhelHostServiceClient:           kessel.NewKesselRhelHostServiceHTTPClient(client),
-		tokenClient:                     tokencli,
+		K8sClusterService: kessel.NewKesselK8SClusterServiceHTTPClient(client),
+		K8SPolicyIsPropagatedToK8SClusterServiceHTTPClient: kesselrel.NewKesselK8SPolicyIsPropagatedToK8SClusterServiceHTTPClient(client),
+		PolicyServiceClient:   kessel.NewKesselK8SPolicyServiceHTTPClient(client),
+		RhelHostServiceClient: kessel.NewKesselRhelHostServiceHTTPClient(client),
+		tokenClient:           tokencli,
 	}, nil
 }
 
