@@ -3,12 +3,11 @@ package v1beta1
 import (
 	"context"
 	"fmt"
+	kesselv1beta2 "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta2/resources"
 	nethttp "net/http"
 
 	"github.com/authzed/grpcutil"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	kesselrel "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta1/relationships"
-	kessel "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta1/resources"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -16,20 +15,14 @@ import (
 type Inventory interface{}
 
 type InventoryClient struct {
-	K8sClusterService                              kessel.KesselK8SClusterServiceClient
-	K8SPolicyIsPropagatedToK8SClusterServiceClient kesselrel.KesselK8SPolicyIsPropagatedToK8SClusterServiceClient
-	PolicyServiceClient                            kessel.KesselK8SPolicyServiceClient
-	RhelHostServiceClient                          kessel.KesselRhelHostServiceClient
-	gRPCConn                                       *grpc.ClientConn
-	tokenClient                                    *TokenClient
+	ResourceServiceClient kesselv1beta2.KesselResourceServiceClient
+	gRPCConn              *grpc.ClientConn
+	tokenClient           *TokenClient
 }
 
 type InventoryHttpClient struct {
-	K8sClusterService                                  kessel.KesselK8SClusterServiceHTTPClient
-	K8SPolicyIsPropagatedToK8SClusterServiceHTTPClient kesselrel.KesselK8SPolicyIsPropagatedToK8SClusterServiceHTTPClient
-	PolicyServiceClient                                kessel.KesselK8SPolicyServiceHTTPClient
-	RhelHostServiceClient                              kessel.KesselRhelHostServiceHTTPClient
-	tokenClient                                        *TokenClient
+	ResourceClient kesselv1beta2.KesselResourceServiceHTTPClient
+	tokenClient    *TokenClient
 }
 
 var (
@@ -64,12 +57,9 @@ func New(config *Config) (*InventoryClient, error) {
 	}
 
 	return &InventoryClient{
-		K8sClusterService: kessel.NewKesselK8SClusterServiceClient(conn),
-		K8SPolicyIsPropagatedToK8SClusterServiceClient: kesselrel.NewKesselK8SPolicyIsPropagatedToK8SClusterServiceClient(conn),
-		PolicyServiceClient:                            kessel.NewKesselK8SPolicyServiceClient(conn),
-		RhelHostServiceClient:                          kessel.NewKesselRhelHostServiceClient(conn),
-		gRPCConn:                                       conn,
-		tokenClient:                                    tokencli,
+		ResourceServiceClient: kesselv1beta2.NewKesselResourceServiceClient(conn),
+		gRPCConn:              conn,
+		tokenClient:           tokencli,
 	}, err
 }
 
@@ -94,11 +84,8 @@ func NewHttpClient(ctx context.Context, config *Config) (*InventoryHttpClient, e
 	}
 
 	return &InventoryHttpClient{
-		K8sClusterService: kessel.NewKesselK8SClusterServiceHTTPClient(client),
-		K8SPolicyIsPropagatedToK8SClusterServiceHTTPClient: kesselrel.NewKesselK8SPolicyIsPropagatedToK8SClusterServiceHTTPClient(client),
-		PolicyServiceClient:   kessel.NewKesselK8SPolicyServiceHTTPClient(client),
-		RhelHostServiceClient: kessel.NewKesselRhelHostServiceHTTPClient(client),
-		tokenClient:           tokencli,
+		ResourceClient: kesselv1beta2.NewKesselResourceHTTPClient(client),
+		tokenClient:    tokencli,
 	}, nil
 }
 
