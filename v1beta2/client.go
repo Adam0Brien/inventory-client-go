@@ -3,7 +3,7 @@ package v1beta1
 import (
 	"context"
 	"fmt"
-	kesselv1beta2 "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta2/resources"
+	kesselv1beta2 "github.com/project-kessel/inventory-api/api/kessel/inventory/v1beta2"
 	nethttp "net/http"
 
 	"github.com/authzed/grpcutil"
