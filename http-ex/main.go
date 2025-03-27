@@ -20,7 +20,6 @@ func main() {
 	request := kessel.CreateRhelHostRequest{RhelHost: &kessel.RhelHost{
 		Metadata: &kessel.Metadata{
 			ResourceType: "rhel-host",
-			Workspace:    "",
 		},
 		ReporterData: &kessel.ReporterData{
 			ReporterType:       kessel.ReporterData_ACM,

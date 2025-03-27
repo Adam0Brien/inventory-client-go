@@ -84,7 +84,7 @@ func NewHttpClient(ctx context.Context, config *Config) (*InventoryHttpClient, e
 	}
 
 	return &InventoryHttpClient{
-		ResourceClient: kesselv1beta2.NewKesselResourceHTTPClient(client),
+		ResourceClient: kesselv1beta2.NewKesselResourceServiceHTTPClient(client),
 		tokenClient:    tokencli,
 	}, nil
 }
