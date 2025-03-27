@@ -20,6 +20,7 @@ type InventoryClient struct {
 	K8SPolicyIsPropagatedToK8SClusterServiceClient kesselrel.KesselK8SPolicyIsPropagatedToK8SClusterServiceClient
 	PolicyServiceClient                            kessel.KesselK8SPolicyServiceClient
 	RhelHostServiceClient                          kessel.KesselRhelHostServiceClient
+	NotificationIntegrationServiceClient           kessel.KesselNotificationsIntegrationServiceClient
 	gRPCConn                                       *grpc.ClientConn
 	tokenClient                                    *TokenClient
 }
@@ -29,6 +30,7 @@ type InventoryHttpClient struct {
 	K8SPolicyIsPropagatedToK8SClusterServiceHTTPClient kesselrel.KesselK8SPolicyIsPropagatedToK8SClusterServiceHTTPClient
 	PolicyServiceClient                                kessel.KesselK8SPolicyServiceHTTPClient
 	RhelHostServiceClient                              kessel.KesselRhelHostServiceHTTPClient
+	NotificationIntegrationClient                      kessel.KesselNotificationsIntegrationServiceHTTPClient
 	tokenClient                                        *TokenClient
 }
 
@@ -68,6 +70,7 @@ func New(config *Config) (*InventoryClient, error) {
 		K8SPolicyIsPropagatedToK8SClusterServiceClient: kesselrel.NewKesselK8SPolicyIsPropagatedToK8SClusterServiceClient(conn),
 		PolicyServiceClient:                            kessel.NewKesselK8SPolicyServiceClient(conn),
 		RhelHostServiceClient:                          kessel.NewKesselRhelHostServiceClient(conn),
+		NotificationIntegrationServiceClient:           kessel.NewKesselNotificationsIntegrationServiceClient(conn),
 		gRPCConn:                                       conn,
 		tokenClient:                                    tokencli,
 	}, err
@@ -96,9 +99,10 @@ func NewHttpClient(ctx context.Context, config *Config) (*InventoryHttpClient, e
 	return &InventoryHttpClient{
 		K8sClusterService: kessel.NewKesselK8SClusterServiceHTTPClient(client),
 		K8SPolicyIsPropagatedToK8SClusterServiceHTTPClient: kesselrel.NewKesselK8SPolicyIsPropagatedToK8SClusterServiceHTTPClient(client),
-		PolicyServiceClient:   kessel.NewKesselK8SPolicyServiceHTTPClient(client),
-		RhelHostServiceClient: kessel.NewKesselRhelHostServiceHTTPClient(client),
-		tokenClient:           tokencli,
+		PolicyServiceClient:           kessel.NewKesselK8SPolicyServiceHTTPClient(client),
+		RhelHostServiceClient:         kessel.NewKesselRhelHostServiceHTTPClient(client),
+		NotificationIntegrationClient: kessel.NewKesselNotificationsIntegrationServiceHTTPClient(client),
+		tokenClient:                   tokencli,
 	}, nil
 }
 
